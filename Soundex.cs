@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Generatesoundex
+namespace code_test_cover
 {
     public class Soundex
     {
