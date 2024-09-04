@@ -3,7 +3,7 @@ using System.Xml.Linq;
 using Xunit;
 using System.Collections.Generic;
 using System;
-using Generatesoundex;
+using code_test_cover;
 
 public class SoundexTests
 {
