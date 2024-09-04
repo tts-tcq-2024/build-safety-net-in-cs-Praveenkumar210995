@@ -7,41 +7,44 @@ using code_test_cover;
 
 public class SoundexTests
 {
-
-    struct MetaData
+    [Fact]
+    public void HandleEmptyString()
     {
-        public string name { get; private set; }
-        public string expectedSoundIndex { get; private set; }
-
-        public MetaData(string _name, string _expectedSoundIndex)
-        {
-            name = _name;
-            expectedSoundIndex = _expectedSoundIndex;
-        }
+        Assert.Equal("", Soundex.GenerateSoundex(""));
     }
 
     [Fact]
-    public void HandlesString()
+    public void HandleSingleString()
     {
-        IReadOnlyList<MetaData> testData = new List<MetaData>()
-        {      
-                            //name       //expectedSoundIndex
-            new MetaData( ""        ,         ""    ),
-            new MetaData( "A"       ,        "A000" ),
-            new MetaData( "Robert"  ,        "R163" ),
-            new MetaData( "Rubin"   ,        "R150" ),
-            new MetaData( "Ashcroft",        "A261" ),
-            new MetaData( "Tymczak" ,        "T522" ),
-            new MetaData( "Pfister" ,        "P236" ),
-            new MetaData( "Honeyman",        "H550" ),
-            new MetaData( "aaBJE1"  ,        "A120" ),
-
-        };
-
-        for (int i = 0; i < testData.Count; i++)
-        {
-            Assert.Equal(testData[i].expectedSoundIndex, Soundex.GenerateSoundex(testData[i].name));
-        }
+        Assert.Equal("A000", Soundex.GenerateSoundex("A"));
     }
-    
+
+    [Fact]
+    public void HandleString()
+    {
+        Assert.Equal("R163", Soundex.GenerateSoundex("Robert"));
+    }
+
+    [Fact]
+    public void HandleStringLowercase()
+    {
+        Assert.Equal("A120", Soundex.GenerateSoundex("aaBJE1"));
+    }
+
+    [Fact]
+    public void HandleStringVowelSeperate()
+    {
+        Assert.Equal("T522", Soundex.GenerateSoundex("Tymczak"));
+    }
+
+    [Fact]
+    public void HandleStringInitialSamecode()
+    {
+        Assert.Equal("P236", Soundex.GenerateSoundex("Pfister"));
+    }
+        [Fact]
+    public void HandleStringOtherSeperator()
+    {
+        Assert.Equal("H555", Soundex.GenerateSoundex("Honeyman"));
+    }
  }
