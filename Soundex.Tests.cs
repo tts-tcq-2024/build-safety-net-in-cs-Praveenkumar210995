@@ -45,6 +45,6 @@ public class SoundexTests
         [Fact]
     public void HandleStringOtherSeperator()
     {
-        Assert.Equal("H555", Soundex.GenerateSoundex("Honeyman"));
+        Assert.Equal("H525", Soundex.GenerateSoundex("Honeycomb"));
     }
  }
