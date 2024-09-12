@@ -1,0 +1,48 @@
+Test case 1: 
+Testcase Name: Empty String 
+Test Description:
+  When Input is empty string output should also be empty
+Input: ""
+Expected Output: ""
+
+Test case 2: 
+Testcase Name: Single Character String 
+Test Description:
+  When Input is single character string output, retain that charatcer in uppercase and pad the result with zeros to make a total of four code.
+Input: "A"
+Expected Output: "A000"
+
+Test case 3: 
+Testcase Name: General String 
+Test Description:
+  Retain first character and pad other three code in digits without repeating same adjacent number
+Input: "Robert"
+Expected Output: "R163"
+
+Test case 4: 
+Testcase Name: Lowercase String 
+Test Description:
+  Retain first character in upper case and pad other three processed code  
+Input: "aaBJE1"
+Expected Output: "A120"
+
+Test case 5: 
+Testcase Name: Vowel seperated String 
+Test Description:
+  Two letters with the same number separated by a vowel letter, then code that twice 
+Input: "Tymczak"
+Expected Output: "T522"
+
+Test case 6: 
+Testcase Name: Duplicate digits string 
+Test Description:
+  Two letters with the same number occurs in string then ignore the second digit 
+Input: "Pfister"
+Expected Output: "P236"
+
+Test case 7: 
+Testcase Name: hwy seperated string 
+Test Description:
+  Two letters with the same number separated by a h,w,y letters then code that once
+Input: "Honeycomb"
+Expected Output: "H525"

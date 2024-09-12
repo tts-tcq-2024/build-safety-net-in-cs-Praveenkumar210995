@@ -1,68 +1,103 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
-public class Soundex
+namespace code_test_cover
 {
-    public static string GenerateSoundex(string name)
+    public class Soundex
     {
-        if (string.IsNullOrEmpty(name))
+        public static string GenerateSoundex(string name)
         {
-            return string.Empty;
+            if (string.IsNullOrEmpty(name))
+            {
+                return string.Empty;
+            }
+
+            StringBuilder soundex = new StringBuilder();
+
+            ProcessInitialChar(name, out soundex);
+
+            soundex.Append(ProcessRemainingChar(name.ToUpper()));
+
+            return soundex.ToString();
+        }
+        private static void ProcessInitialChar(string name, out StringBuilder soundex)
+        {
+            soundex = new StringBuilder();
+            soundex.Append(char.ToUpper(name[0]));
         }
 
-        StringBuilder soundex = new StringBuilder();
-        soundex.Append(char.ToUpper(name[0]));
-        char prevCode = GetSoundexCode(name[0]);
-
-        for (int i = 1; i < name.Length && soundex.Length < 4; i++)
+        private static string ProcessRemainingChar(string name)
         {
-            char code = GetSoundexCode(name[i]);
-            if (code != '0' && code != prevCode)
+            StringBuilder soundex = new StringBuilder();
+            char prevCode = GetSoundexCode(name[0]);
+            var vowelSeperateSameCode = false;
+
+            for (int i = 1; i < name.Length && soundex.Length < 3; i++)
+            {
+                char code = GetSoundexCode(name[i]);
+
+                checkIfVowelSeperateSameCode(prevCode, code, name[i - 1], soundex, ref vowelSeperateSameCode);
+                AppendCode(ref soundex, code, ref prevCode, ref vowelSeperateSameCode);
+
+            }
+            return PadSoundex(soundex);
+        }
+
+        private static void AppendCode(ref StringBuilder soundex, char code, ref char prevCode, ref bool vowelSeprateSameCode)
+        {
+            if (ShouldAppendCode(code, prevCode, vowelSeprateSameCode))
             {
                 soundex.Append(code);
                 prevCode = code;
+                vowelSeprateSameCode = false;
             }
         }
-
-        while (soundex.Length < 4)
+        private static bool ShouldAppendCode(char code, char prevCode, bool vowelSeprateSameCode)
         {
-            soundex.Append('0');
+            return ((code != prevCode) && (code != '0')) || vowelSeprateSameCode;
         }
 
-        return soundex.ToString();
-    }
-
-    private static char GetSoundexCode(char c)
-    {
-        c = char.ToUpper(c);
-        switch (c)
+        private static string PadSoundex(StringBuilder soundex)
         {
-            case 'B':
-            case 'F':
-            case 'P':
-            case 'V':
-                return '1';
-            case 'C':
-            case 'G':
-            case 'J':
-            case 'K':
-            case 'Q':
-            case 'S':
-            case 'X':
-            case 'Z':
-                return '2';
-            case 'D':
-            case 'T':
-                return '3';
-            case 'L':
-                return '4';
-            case 'M':
-            case 'N':
-                return '5';
-            case 'R':
-                return '6';
-            default:
-                return '0'; // For A, E, I, O, U, H, W, Y
+            while (soundex.Length < 3)
+            {
+                soundex.Append(0);
+            }
+            return soundex.ToString();
+        }
+
+        private static bool CharIsVowel(char Char)
+        {
+            var vowels = new List<char>() { 'A', 'E', 'I', 'O', 'U' };
+
+            return vowels.Contains(Char);
+        }
+
+
+        private static void checkIfVowelSeperateSameCode(char prevCode, char code, char prevChar, StringBuilder soundex, ref bool vowelSeprateSameCode)
+        {
+            vowelSeprateSameCode = ((soundex.Length >= 1) && CharIsVowel(prevChar) && (code == prevCode));
+        }
+
+        private static readonly Dictionary<char, char> SoundexCodeMap = new Dictionary<char, char>
+        {
+            { 'B', '1' }, { 'F', '1' }, { 'P', '1' }, { 'V', '1' },
+            { 'C', '2' }, { 'G', '2' }, { 'J', '2' }, { 'K', '2' },
+            { 'Q', '2' }, { 'S', '2' }, { 'X', '2' }, { 'Z', '2' },
+            { 'D', '3' }, { 'T', '3' },
+            { 'L', '4' },
+            { 'M', '5' }, { 'N', '5' },
+            { 'R', '6' }
+        };
+
+        private static char GetSoundexCode(char c)
+        {
+            char code;
+            c = char.ToUpper(c);
+            return SoundexCodeMap.TryGetValue(c, out code) ? code : '0'; // For A, E, I, O, U, H, W, Y
         }
     }
 }
+
